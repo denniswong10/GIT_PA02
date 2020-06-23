@@ -21,7 +21,13 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        if(CurrentState == GameState.GameIdle && Input.GetKeyDown(KeyCode.Return))
+        if (Lives <= 0)
+        {
+            HUD.HUDManager.GameOver();
+            CurrentState = GameState.GameOver;
+        }
+
+        if (CurrentState == GameState.GameIdle && Input.GetKeyDown(KeyCode.Return))
         {            
             CurrentState = GameState.GameStart;
             Time.timeScale = 1;

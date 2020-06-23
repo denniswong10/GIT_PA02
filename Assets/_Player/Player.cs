@@ -14,12 +14,26 @@ public class Player : MonoBehaviour
     private Animator thisAnimator = null;
 
     private float moveSpeed = 0.05f;
+    public GameObject Explosion;
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.collider.tag == "Obstacle")
+        {
+            GameManager.Lives--;
+            HUD.HUDManager.UpdateLives();
+            Instantiate(Explosion, transform.position, Quaternion.identity);
+            Destroy(hit.gameObject);
+        }
+    }
 
     void Start()
     {
         thisController = GetComponent<CharacterController>();
         thisAnimator = GetComponentInChildren<Animator>();
         playerMesh = transform.GetChild(0);
+
+        thisController.GetComponent<CharacterController>().detectCollisions = true;
     }
 
     void Update()
@@ -51,7 +65,7 @@ public class Player : MonoBehaviour
         }
 
         thisController.Move(MoveDirection);
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -1.5f, 1.5f), transform.position.y, transform.position.z);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -1.5f, 1.5f), transform.position.y, -7);
     }
 
 }
